@@ -53,6 +53,7 @@ UserSchema.statics.findByCredentials = function(email, password) {
   });
 };
 
+
 UserSchema.statics.findByToken = function(token) {
   var User = this;
   var decoded;
@@ -87,6 +88,16 @@ UserSchema.pre('save', function(next) {
     next();
   }
 });
+
+UserSchema.methods.removeToken = function(token){
+  var user = this;
+
+  return user.update({
+    $pull: {
+      tokens: {token}
+    }
+  });
+};
 
 UserSchema.methods.toJSON = function() {
   var user = this;
